@@ -14,7 +14,7 @@
 | [`lab1_report.json`](lab1_report.json) — do ô "Báo cáo cuối" sinh ra | v |
 | [`hand_calc.jpg`](hand_calc.jpg) — ảnh tính tay có các bước | v |
 
-2. Kết quả chính
+##2. Kết quả chính
 
 Chép bảng so sánh cuối Phần 5 (F1 test, F1 SUB 40, p95 ms/tin, USD/1k tin) của chính bạn.
 
@@ -30,7 +30,7 @@ Mô hình	F1 (test)	F1 (SUB 40)	p95 ms/tin	USD / 1k tin
 
 (Bảng đầy đủ các chỉ số: BoW+LogReg đạt Precision 0.987, Recall 0.804; BoW+MLP đạt Precision 0.966, Recall 0.913; Encoder+LogReg đạt Precision 0.957, Recall 0.967).
 
-3. Dự đoán và thực tế
+##3. Dự đoán và thực tế
 
 Chọn 3 dự đoán predict(...) lệch nhiều nhất so với kết quả. Mỗi cái: bạn đoán gì, ra gì, vì sao lệch.
 
@@ -50,7 +50,8 @@ Vì sao lệch: Về toán học hai ma trận nhân liên tiếp đúng là tư
 Bạn đoán gì: Mô hình Encoder + LogReg sẽ vượt trội hơn BoW trên các tin lắt léo vì hiểu được ngữ cảnh toàn câu.
 Ra gì: Cả 2 mô hình đúng ngang nhau: cùng đúng 5/6 tin và cùng đoán sai đúng câu số 6: "Last chance! Your account rewards expire tonight, confirm details to keep them".
 Vì sao lệch: Kỳ vọng Embedding là chiếc đũa thần giải quyết mọi bẫy từ ngữ, nhưng câu tin nhắn trên được ngụy trang hoàn toàn giống một tin nhắn thông báo dịch vụ bình thường (transactional). Khi không có bối cảnh bên ngoài (người gửi có uy tín không, người nhận có tài khoản đó không) thì ngay cả mô hình ngữ nghĩa sâu cũng bị đánh lừa.
-4. Phân tích 50 case khó
+
+##4. Phân tích 50 case khó
 
 Model nào tụt nhiều nhất, ở nhóm case nào? Nêu 2 case cụ thể và cơ chế khiến model sai.
 
@@ -69,7 +70,8 @@ Case #29 (Nhóm Né từ khoá):
 Nội dung: "C0ngr4tulat10ns! Y0u h4ve w0n a £1000 g1ft c4rd. Cl4im n0w at w1n-gift.c0m" (Nhãn thật: spam).
 Model sai: BoW + LogReg và BoW + MLP đoán thành ham.
 Cơ chế sai: Kẻ tấn công dùng kỹ thuật leetspeak thay chữ bằng số (0 thay cho o, 4 thay cho a, 1 thay cho i). Khi tách token, bộ tách từ tạo ra các chuỗi lạ như c0ngr4tulat10ns, cl4im không hề nằm trong từ điển 2.000 từ của tập train. Vector BoW bị biến thành toàn số 0 (Out-Of-Vocabulary), mô hình không tìm thấy bất kỳ tín hiệu spam nào nên mặc định xếp vào ham.
-5. Thử thách cá nhân
+
+##5. Thử thách cá nhân
 
 Đề theo SEED của bạn, cách làm, kết quả, giải thích.
 
@@ -88,7 +90,8 @@ Vocab 5000 từ: F1 = 0.886 (Precision = 0.987, Recall = 0.804)
 Giải thích:
 Khi giảm xuống 100 từ: F1 giảm mạnh từ 0.886 xuống 0.795 do Recall tụt nghiêm trọng (từ 0.804 xuống 0.674, bỏ sót hơn 32% lượng spam). Lý do là 100 từ phổ biến nhất đa phần là các từ ngữ pháp chung chung (i, to, you, the, in...), bỏ lọt hầu hết các từ khóa nhận diện spam quan trọng.
 Khi tăng từ 2000 lên 5000 từ: Chỉ số giữ nguyên tuyệt đối không đổi (F1 = 0.886). Lý do là tập huấn luyện chỉ có khoảng hơn 2.000 từ xuất hiện đủ thường xuyên. Các từ từ vị trí 2001 trở đi là các từ cực hiếm (chỉ xuất hiện 1 lần do viết sai chính tả, ký tự ngẫu nhiên), không xuất hiện ở tập test và có trọng số học được xấp xỉ bằng 0 nên không làm xê dịch mặt phẳng phân chia quyết định. Ngưỡng 2.000 từ đã đạt điểm bão hòa tối ưu.
-6. Phương án cho sản phẩm thật
+
+##6. Phương án cho sản phẩm thật
 
 Với yêu cầu p95 < 50 ms/tin cho 10 triệu SMS/ngày: chọn phương án nào, dẫn số liệu nào, chấp nhận đánh đổi gì.
 
@@ -116,7 +119,8 @@ Tầng 2 (LLM phân tích sâu): Khoảng 5% tin nhắn rơi vào vùng phân v�
 ≤
 0.8
 0.2≤p≤0.8) hoặc chứa dấu hiệu tấn công đối kháng sẽ chuyển tiếp cho LLM nhỏ (kèm prompt phòng thủ) xử lý ngữ nghĩa chuyên sâu. Cách này vừa đảm bảo SLA p95 toàn hệ thống, vừa tiết kiệm 95% chi phí API.
-7. AI log và điều đã học
+
+##7. AI log và điều đã học
 
 Mỗi lần dùng AI: hỏi gì, nhận gì, bạn sửa gì. Sau đó 2–3 câu: điều bạn hiểu ra hôm nay mà trước đó chưa hiểu.
 
